@@ -151,7 +151,12 @@ const pytania = [
     '143. Prosze opisac jak można przeciążać atakowany system',
     ]
 
+let isPlaying = false
+
+
 btn.addEventListener("click", ()=>{
+    if (isPlaying) return
+    isPlaying = true
     i = 100
     span.innerText = "0%"
     pytanie.innerText = ""
@@ -163,8 +168,14 @@ btn.addEventListener("click", ()=>{
             i--;
             span.innerText = `${100 - i}%`
             subpasek.style = `transform: translateX(-${i}%)`
-            if (i === 0) clearInterval(interval)
+            if (i === 0) {
+             clearInterval(interval)
+              setTimeout(()=> {
+                    isPlaying = false
+              }, 2000)
+             }
             pytanie.innerText = pytania[getRandomInt(pytania.length)]
+            
         }, 60)
     }, 3300)
 
