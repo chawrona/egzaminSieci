@@ -172,7 +172,7 @@ btn.addEventListener("click", ()=>{
              clearInterval(interval)
               setTimeout(()=> {
                     isPlaying = false
-              }, 2000)
+              }, 3500)
              }
             pytanie.innerText = pytania[getRandomInt(pytania.length)]
             
