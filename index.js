@@ -1,10 +1,19 @@
-const btn = document.querySelector("button")
+const btn = document.querySelector(".btn")
 const audio = document.querySelector("audio")
 const subpasek = document.querySelector(".subpasek")
 const span = document.querySelector("span")
+const git = document.querySelector(".git")
+
 let i = 100;
 
 const pytanie = document.querySelector(".pytanie")
+
+const indeksy = JSON.parse(localStorage.getItem("indeksy")) ?? []
+console.log(indeksy);
+
+function setLocalStorage() {
+    localStorage.setItem("indeksy", JSON.stringify(indeksy))
+}
 
 const pytania = [
     '1. Czym charakteryzuje się komutacja łączy?',
@@ -27,7 +36,7 @@ const pytania = [
     '18. Prosze opisać warstwe fizyczną w modelu ISO/OSI',
     '19. Proszę wyjaśnić mechanizm enkapsulacji. W jakim celu i kiedy jest stosowany?',
     '20. Proszę wymienić znane sposoby na zapewnienie poprawności przesyłu danych w warstwie fizycznej.',
-    '21. Na czym polega kontrola parzystości? Kiedy się ją stosuje. Zalety, wady. Umiejętność wyliczenia bitu parzystości.',  
+    '21. Na czym polega kontrola parzystości? Kiedy się ją stosuje. Zalety, wady. Umiejętność wyliczenia bitu parzystości.',
     '22. Na czym polega “suma kontrolna”? Gdzie się ją stosuje? Przykład, umiejętność wyliczenia.  ',
     '23. Kod Hamminga. Do czego służy? Jakie ma zalety, jakie wady?',
     '24. Kod Hamminga, umiejętność zakodowania ciągu danych. (np. ciągu liter: EXAM, albo 10100011, 1100)',
@@ -134,7 +143,7 @@ const pytania = [
     '125. Jaka funkcja jest realizowana przez NAT?',
     '126. Prosze zaproponować adresacje sieciowa w malej firmie skladajacej się z 2 pięter w biurowcu, na każdym z nich do firmy należą 3 pokoje, w każdym z nich jest 5 stanowisk komputerowych.',
     '127. Prosze zastanowic sie jak powinna wygladac adresacja z pytania 127, aby najszybciej wdrożyć kolejny pokój na jednym z pięter, który będzie typowym “print roomem” z zestawem 3 drukarek i skanerem sieciowym',
-    '128. Prosze zastanowić się i zaproponowac jak powinna wygladac adresacja zaproponowana w pytaniu 127 aby najszybciej wprowadzić możliwość pracy na dodatkowym piętrze.','129. Prosze opisac roznice miedzy SourceNAT i DestinationNAT',
+    '128. Prosze zastanowić się i zaproponowac jak powinna wygladac adresacja zaproponowana w pytaniu 127 aby najszybciej wprowadzić możliwość pracy na dodatkowym piętrze.', '129. Prosze opisac roznice miedzy SourceNAT i DestinationNAT',
     '130. Prosze sprobowac rozwikłać tajemnice kryjące się za pojęciem: maskarada',
     '131. Prosze omowic znane wady adresacji IPv4 bedace motorem do opracowania IPv6',
     '132. Prosze omowic jak wyglada adresacja IPv6',
@@ -149,12 +158,15 @@ const pytania = [
     '141. Prosze spróbować opisac roznice miedzy atakami typu DDoS a DoS',
     '142. Prosze opisac jak może przebiegać atak polegający na tzw. SYN flooding',
     '143. Prosze opisac jak można przeciążać atakowany system',
-    ]
+]
 
 let isPlaying = false
 
+let currentIndex = 0;
 
-btn.addEventListener("click", ()=>{
+btn.addEventListener("click", () => {
+    if (pytania.length === indeksy.length) return alert("Ni ma chuja, że ktoś się tego wszystkiego nauczył XD kłamiesz zwyczajnie, wiesz o tym? Oszukujesz samego siebie, nikt inny Ciebie nie sprawdza")
+    git.style = "display: none"
     if (isPlaying) return
     isPlaying = true
     i = 100
@@ -163,24 +175,62 @@ btn.addEventListener("click", ()=>{
     subpasek.style = `transform: translateX(-${i}%)`
 
     audio.play()
-    setTimeout(()=> {
-        const interval = setInterval(()=> {
+    setTimeout(() => {
+        const interval = setInterval(() => {
             i--;
             span.innerText = `${100 - i}%`
             subpasek.style = `transform: translateX(-${i}%)`
             if (i === 0) {
-             clearInterval(interval)
-              setTimeout(()=> {
+                clearInterval(interval)
+                setTimeout(() => {
                     isPlaying = false
-              }, 3500)
-             }
-            pytanie.innerText = pytania[getRandomInt(pytania.length)]
-            
+                }, 3500)
+                git.style = "display: block"
+            }
+           
+            currentIndex = getRandomInt(pytania.length)
+            while(indeksy.includes(currentIndex)) currentIndex = getRandomInt(pytania.length)
+            pytanie.innerText = pytania[currentIndex]
+
         }, 60)
     }, 3300)
 
 })
 
+git.addEventListener("click", () => {
+    indeksy.push(currentIndex);
+    git.style = "display: none"
+    setLocalStorage()
+})
+
+
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
-  }
+}
+
+function reset() {
+    indeksy.length = 0;
+    setLocalStorage()
+}
+
+
+const pasekElement = document.querySelector('.pasek');
+
+let clickCount = 0;
+let lastClickTime = 0;
+
+pasekElement.addEventListener('click', () => {
+    const currentTime = new Date().getTime();
+
+    if (currentTime - lastClickTime < 1000) {
+        clickCount++;
+        if (clickCount === 3) {
+            if(confirm("Resetować pytania?")) reset()
+            clickCount = 0;
+        }
+    } else {
+        clickCount = 1;
+    }
+
+    lastClickTime = currentTime;
+});
