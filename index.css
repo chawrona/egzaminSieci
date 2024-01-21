@@ -78,9 +78,9 @@ ul span {
 }
 
 li {
-  text-align: center;
+  text-align: left;
   width: 100%;
-  line-height: 0.8;
+  line-height: 1.2;
   margin-top: 0.5em;
 }
 
