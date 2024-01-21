@@ -1,18 +1,24 @@
 const btn = document.querySelector(".btn")
 const audio = document.querySelector("audio")
 const subpasek = document.querySelector(".subpasek")
-const span = document.querySelector("span")
+const span = document.querySelector(".XD")
 const git = document.querySelector(".git")
+const ogar = document.querySelector(".ogar")
+const nieogar = document.querySelector(".nieogar")
 
 let i = 100;
 
 const pytanie = document.querySelector(".pytanie")
 
-const indeksy = JSON.parse(localStorage.getItem("indeksy")) ?? []
+const indeksy = JSON.parse(localStorage.getItem("indeksy")) ?? [24,25]
 console.log(indeksy);
+
+
+
 
 function setLocalStorage() {
     localStorage.setItem("indeksy", JSON.stringify(indeksy))
+    ogar.innerHTML = indeksy.length
 }
 
 const pytania = [
@@ -160,6 +166,11 @@ const pytania = [
     '143. Prosze opisac jak można przeciążać atakowany system',
 ]
 
+nieogar.innerHTML = pytania.length
+ogar.innerHTML = indeksy.length
+
+
+
 let isPlaying = false
 
 let currentIndex = 0;
@@ -201,6 +212,7 @@ git.addEventListener("click", () => {
     indeksy.push(currentIndex);
     git.style = "display: none"
     setLocalStorage()
+    addLI(currentIndex)
 })
 
 
@@ -213,24 +225,21 @@ function reset() {
     setLocalStorage()
 }
 
+const ul = document.querySelector("ul")
 
-const pasekElement = document.querySelector('.pasek');
+function addLI(id) {
+    const li = document.createElement("li")
+    li.innerHTML = pytania[id] + ` <span id='${id}'>X</span>`
+    ul.appendChild(li)
 
-let clickCount = 0;
-let lastClickTime = 0;
+    li.querySelector('span').addEventListener("click", () => {
+        indeksy.splice( indeksy.indexOf(id), 1);
+        
+        setLocalStorage()
+        li.remove()
+    })
+}
 
-pasekElement.addEventListener('click', () => {
-    const currentTime = new Date().getTime();
-
-    if (currentTime - lastClickTime < 1000) {
-        clickCount++;
-        if (clickCount === 3) {
-            if(confirm("Resetować pytania?")) reset()
-            clickCount = 0;
-        }
-    } else {
-        clickCount = 1;
-    }
-
-    lastClickTime = currentTime;
+indeksy.forEach(element => {
+    addLI(element)
 });
