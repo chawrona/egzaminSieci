@@ -5,6 +5,27 @@ const span = document.querySelector(".XD")
 const git = document.querySelector(".git")
 const ogar = document.querySelector(".ogar")
 const nieogar = document.querySelector(".nieogar")
+const procent = document.querySelector(".procent")
+const forward = document.querySelector(".forward")
+
+const mute = document.querySelector(".mute")
+let isSwap = -1
+
+mute.addEventListener("click", swap)
+
+function swap() {
+    if (isSwap > 0) {
+        mute.classList.add("fa-music")
+        mute.classList.remove("fa-volume-xmark")
+        audio.volume = 1;
+    } else {
+        mute.classList.add("fa-volume-xmark")
+        mute.classList.remove("fa-music")
+        audio.volume = 0;
+    }
+    isSwap *= -1
+}
+
 
 let i = 100;
 
@@ -14,11 +35,12 @@ const indeksy = JSON.parse(localStorage.getItem("indeksy")) ?? [24,25]
 console.log(indeksy);
 
 
-
+let isFirst = false;
 
 function setLocalStorage() {
     localStorage.setItem("indeksy", JSON.stringify(indeksy))
     ogar.innerHTML = indeksy.length
+    procent.innerText = (indeksy.length/pytania.length).toFixed(2) + "%";
 }
 
 const pytania = [
@@ -168,16 +190,20 @@ const pytania = [
 
 nieogar.innerHTML = pytania.length
 ogar.innerHTML = indeksy.length
+procent.innerText = (indeksy.length/pytania.length).toFixed(2) + "%";
 
-
-
+let forwardo = 0;
 let isPlaying = false
 
 let currentIndex = 0;
 
 btn.addEventListener("click", () => {
     if (pytania.length === indeksy.length) return alert("Ni ma chuja, że ktoś się tego wszystkiego nauczył XD kłamiesz zwyczajnie, wiesz o tym? Oszukujesz samego siebie, nikt inny Ciebie nie sprawdza")
-    git.style = "display: none"
+    if(!isFirst) {
+        btn.classList.add("clicked")
+    }
+    git.classList.add("mam")
+    btn.classList.add("hide")
     if (isPlaying) return
     isPlaying = true
     i = 100
@@ -187,16 +213,31 @@ btn.addEventListener("click", () => {
 
     audio.play()
     setTimeout(() => {
+        forward.classList.remove("none")
         const interval = setInterval(() => {
             i--;
             span.innerText = `${100 - i}%`
             subpasek.style = `transform: translateX(-${i}%)`
-            if (i === 0) {
+            if (i === 0 || forwardo === 1) {
+                i = 0
+                if (forwardo === 1) {
+                    currentIndex = getRandomInt(pytania.length)
+                    while(indeksy.includes(currentIndex)) currentIndex = getRandomInt(pytania.length)
+                    pytanie.innerText = pytania[currentIndex]
+                    audio.currentTime = 0
+                    audio.pause()
+                    span.innerText = `${100 - i}%`
+                    subpasek.style = `transform: translateX(-${i}%)`
+                }
+
                 clearInterval(interval)
                 setTimeout(() => {
                     isPlaying = false
                 }, 3500)
-                git.style = "display: block"
+                btn.classList.remove("hide")
+                git.classList.remove("mam")
+             
+                forwardo = 0
             }
            
             currentIndex = getRandomInt(pytania.length)
@@ -205,14 +246,20 @@ btn.addEventListener("click", () => {
 
         }, 60)
     }, 3300)
-
 })
+
+forward.addEventListener("click", ()=> {
+    forwardo = 1
+    console.log("clicked");
+    forward.classList.add("none")
+})
+
 
 git.addEventListener("click", () => {
     indeksy.push(currentIndex);
-    git.style = "display: none"
     setLocalStorage()
     addLI(currentIndex)
+    git.classList.add("mam")
 })
 
 
@@ -229,14 +276,17 @@ const ul = document.querySelector("ul")
 
 function addLI(id) {
     const li = document.createElement("li")
-    li.innerHTML = pytania[id] + ` <span id='${id}'>X</span>`
+    li.innerHTML = pytania[id];
     ul.appendChild(li)
 
-    li.querySelector('span').addEventListener("click", () => {
-        indeksy.splice( indeksy.indexOf(id), 1);
+    li.addEventListener("click", () => {
+        toDelete = confirm("Usunąć?")
+        if(toDelete) {
+            indeksy.splice( indeksy.indexOf(id), 1);
+            setLocalStorage()
+            li.remove()
+        }
         
-        setLocalStorage()
-        li.remove()
     })
 }
 

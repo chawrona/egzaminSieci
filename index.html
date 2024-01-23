@@ -4,30 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./index.css">
+    <script src="https://kit.fontawesome.com/09700efd56.js" crossorigin="anonymous"></script>
     <title>Egzamin Sieci Komputerowe</title>
 </head>
 <body>
+    
     <main>
         <h1>Losowanie pytań</h1>
+        <h2>Masz <span class="procent"></span> na zdanie!</h2>
         <p>Ilość znanych pytań: <span class="ogar">0</span> / <span class="nieogar">200</span></p>
         <div class="wrap">
             <p class="pytanie"></p>
-            <div class="box"></div>
+            <div class="box">
+                <i class="fa-solid fa-music mute"></i>
+                <i class="fa-solid fa-forward forward none"></i>
+               <i class="fa-solid fa-play btn"></i>
+            </div>
+
+           
         </div>
-        <div class="btns">
-            <button class="git">Dodaj do znanych</button>
-            <button class="btn">losuj</button>
-        </div>
+
         <div class="pasek">
             <span class="XD">0%</span>
-            <div class="subpasek">
-                
-            </div>
+            <div class="subpasek"></div>
         </div>
-        <h2>Pytania, które znasz:</h2>
-        <ul>
 
-        </ul>
+        <div class="btns">
+            <button class="git mam">Dodaj do znanych</button>
+        </div>
+        <h3>Pytania, które znasz:</h3>
+        <ul></ul>
+
+       
     </main>
     <audio controls hidden="hidden">
         <source src="LOSU.mp3" type="audio/mp3">
