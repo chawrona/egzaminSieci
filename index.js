@@ -277,6 +277,7 @@ function reset() {
 const ul = document.querySelector("ul")
 
 function addLI(id) {
+    if(isPlaying) return
     const li = document.createElement("li")
     li.innerHTML = pytania[id];
     ul.appendChild(li)
