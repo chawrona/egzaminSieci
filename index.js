@@ -38,7 +38,7 @@ let isClicked2 = false;
 
 let isFirst = false;
 
-    procent.innerText = ((indeksy.length/pytania.length) * 100).toFixed(2) + "%";
+    
 
 function setLocalStorage() {
     localStorage.setItem("indeksy", JSON.stringify(indeksy))
