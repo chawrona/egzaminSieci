@@ -205,6 +205,8 @@ btn.addEventListener("click", () => {
     git.classList.add("mam")
     btn.classList.add("hide")
     if (isPlaying) return
+    audio.currentTime = 0
+    audio.pause()
     isPlaying = true
     i = 100
     span.innerText = "0%"
@@ -228,16 +230,16 @@ btn.addEventListener("click", () => {
                     audio.pause()
                     span.innerText = `${100 - i}%`
                     subpasek.style = `transform: translateX(-${i}%)`
+                    isPlaying = false
                 }
 
                 clearInterval(interval)
-                setTimeout(() => {
-                    isPlaying = false
-                }, 3500)
+
                 btn.classList.remove("hide")
                 git.classList.remove("mam")
-             
+                forward.classList.add("none")
                 forwardo = 0
+                isPlaying = false
             }
            
             currentIndex = getRandomInt(pytania.length)
