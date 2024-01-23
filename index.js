@@ -34,13 +34,14 @@ const pytanie = document.querySelector(".pytanie")
 const indeksy = JSON.parse(localStorage.getItem("indeksy")) ?? [24,25]
 console.log(indeksy);
 
+let isClicked2 = false;
 
 let isFirst = false;
 
 function setLocalStorage() {
     localStorage.setItem("indeksy", JSON.stringify(indeksy))
     ogar.innerHTML = indeksy.length
-    procent.innerText = (indeksy.length/pytania.length).toFixed(2) + "%";
+    procent.innerText = ((indeksy.length/pytania.length) * 100).toFixed(2) + "%";
 }
 
 const pytania = [
@@ -232,6 +233,7 @@ btn.addEventListener("click", () => {
                     subpasek.style = `transform: translateX(-${i}%)`
                     isPlaying = false
                 }
+                    isClicked2 = true;
 
                 clearInterval(interval)
 
@@ -258,10 +260,12 @@ forward.addEventListener("click", ()=> {
 
 
 git.addEventListener("click", () => {
+    if( isClicked2 === true){
     indeksy.push(currentIndex);
     setLocalStorage()
     addLI(currentIndex)
-    git.classList.add("mam")
+         isClicked2 = false;
+    git.classList.add("mam")}
 })
 
 
@@ -277,7 +281,6 @@ function reset() {
 const ul = document.querySelector("ul")
 
 function addLI(id) {
-    if(isPlaying) return
     const li = document.createElement("li")
     li.innerHTML = pytania[id];
     ul.appendChild(li)
