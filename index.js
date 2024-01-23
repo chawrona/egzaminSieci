@@ -38,6 +38,8 @@ let isClicked2 = false;
 
 let isFirst = false;
 
+    procent.innerText = ((indeksy.length/pytania.length) * 100).toFixed(2) + "%";
+
 function setLocalStorage() {
     localStorage.setItem("indeksy", JSON.stringify(indeksy))
     ogar.innerHTML = indeksy.length
@@ -191,7 +193,7 @@ const pytania = [
 
 nieogar.innerHTML = pytania.length
 ogar.innerHTML = indeksy.length
-procent.innerText = (indeksy.length/pytania.length).toFixed(2) + "%";
+    procent.innerText = ((indeksy.length/pytania.length) * 100).toFixed(2) + "%";
 
 let forwardo = 0;
 let isPlaying = false
